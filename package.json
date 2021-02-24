@@ -1,0 +1,26 @@
+{
+  "name": "publish-videoclip-h264-vp8",
+  "version": "1.0.0",
+  "description": "Just a project arena for testing vp8 and h264 project publishing videoclips on different codecs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melveg/publish-videoclip-H264-VP8.git"
+  },
+  "author": "Melvin Vega",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/melveg/publish-videoclip-H264-VP8/issues"
+  },
+  "homepage": "https://github.com/melveg/publish-videoclip-H264-VP8#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "opentok": "^2.11.0",
+    "pug": "^3.0.0"
+  }
+}

@@ -1,0 +1,19 @@
+html 
+  head 
+    title 
+      | Codec Support
+  body
+    h1= codec + 'Project'
+    div(id="videoclip-selector")
+      form(id="videoclip-form")
+        input(type="text", id="videoclip", placeholder="Enter the video url", width="300px" height="40px", style="font-size:20px;", required)
+        input(type="submit", id="videoclip-button", value="Load Video", width="100px" height="40px", style="font-size:20px;")
+      div(id='videoclip-loader')
+    div(id="publisher")
+    div(id="subscriber")
+    script.
+      window.apiKey = "#{apiKey}";
+      window.sessionId = "#{sessionId}";
+      window.token = "#{token}";
+    script(src="https://static.opentok.com/v2/js/opentok.min.js")
+    script(src="js/codec.js")
