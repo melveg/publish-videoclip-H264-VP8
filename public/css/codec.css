@@ -2,6 +2,9 @@ div#videoclip-selector {
   float:left;
   width: 100%;
 }
+div#videoclip-loader {
+  display: none;
+}
 div#publisher {
   float: left;
   width: 50%;
