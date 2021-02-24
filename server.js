@@ -7,7 +7,7 @@ const OpenTok = require('opentok'),
     OT = new OpenTok(config.OT_API_KEY, config.OT_API_SECRET);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.set('view engine', 'pug');
 
