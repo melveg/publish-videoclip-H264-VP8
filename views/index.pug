@@ -4,7 +4,10 @@ html
       | Codec Support
     link(rel="stylesheet", href="css/codec.css")
   body
-    h1= codec + 'Project'
+    h1= codec + ' Project'
+    hr
+    input(type="button", id="toggle-publisher", value="Go Live")
+    hr
     div(id="videoclip-selector")
       form(id="videoclip-form")
         input(type="text", id="videoclip", placeholder="Enter the video url", width="300px" height="40px", style="font-size:20px;", required)

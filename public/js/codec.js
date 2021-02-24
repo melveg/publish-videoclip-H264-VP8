@@ -1,10 +1,7 @@
 window.addEventListener('load', function() {
 
   //Start the opentok publisher
-  const publisher = OT.initPublisher('publisher', {
-    insertMode: 'append',
-    fitMode: 'contain',
-  });
+  let publisher;
 
   let videoclipPublisher;
 
@@ -21,6 +18,22 @@ window.addEventListener('load', function() {
       return;
     }
     console.log('Streamer OT Session Connected');
+  });
+
+  //Get the subscribers and load them in to the subscriber div
+  session.on('streamCreated', function(event) {
+    session.subscribe(event.stream, 'subscriber', {
+      insertMode: 'append',
+    }, function(error){
+    });
+  });
+
+  function publishCamera() {
+    publisher = OT.initPublisher('publisher', {
+      insertMode: 'append',
+      fitMode: 'contain',
+    });
+
     //Transmit the publisher to the Opentok session
     session.publish(publisher, (error) => {
       if (error) {
@@ -31,15 +44,8 @@ window.addEventListener('load', function() {
       }
       console.log('Streamer OT Published');
     });
-  });
 
-  //Get the subscribers and load them in to the subscriber div
-  session.on('streamCreated', function(event) {
-    session.subscribe(event.stream, 'subscriber', {
-      insertMode: 'append',
-    }, function(error){
-    });
-  });
+  }
 
   //Publish videoclip
   function publishVideoClip(videoclipElement) {
@@ -76,6 +82,20 @@ window.addEventListener('load', function() {
   }
 
   //UI actions
+  const togglePublisher = document.querySelector("input#toggle-publisher");
+  togglePublisher.addEventListener('click', function(){
+    if(togglePublisher) {
+      if(togglePublisher.value == 'Go Live'){
+        publishCamera();
+        togglePublisher.value = 'To Backstage';
+      } else {
+        if(publisher) {
+          session.unpublish(publisher);
+        }
+        togglePublisher.value = 'Go Live';
+      }
+    }
+  });
   const video = document.createElement("video");
   video.crossOrigin = "anonymous";
   video.setAttribute('style','width:300px !important;height:250px !important;');
