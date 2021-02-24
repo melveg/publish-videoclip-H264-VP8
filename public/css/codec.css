@@ -1,0 +1,12 @@
+div#videoclip-selector {
+  float:left;
+  width: 100%;
+}
+div#publisher {
+  float: left;
+  width: 50%;
+}
+div#subscriber {
+  float: left;
+  width: 50%;
+}

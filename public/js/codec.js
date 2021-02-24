@@ -6,6 +6,8 @@ window.addEventListener('load', function() {
     fitMode: 'contain',
   });
 
+  let videoclipPublisher;
+
   const session = OT.initSession(window.apiKey, window.sessionId);
 
   session.connect(window.token, (error) => {
@@ -35,25 +37,77 @@ window.addEventListener('load', function() {
   session.on('streamCreated', function(event) {
     session.subscribe(event.stream, 'subscriber', {
       insertMode: 'append',
-      width: '100%',
-      height: '100%'
     }, function(error){
-      console.log(error.message);
     });
   });
 
+  //Publish videoclip
+  function publishVideoClip(videoclipElement) {
+    if(videoclipElement) {
+      let videoStream;
+
+      if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+        videoStream = videoclipElement.mozCaptureStream();
+      else 
+        videoStream = videoclipElement.captureStream();
+
+      const videoTrack = videoStream.getVideoTracks()[0];
+      const audioTrack = videoStream.getAudioTracks()[0];
+
+      videoclipPublisher = OT.initPublisher('publisher', {
+        insertMode: 'append',
+        fitMode: 'contain',
+        videoSource: videoTrack,
+        audioSource: audioTrack,
+        publishVideo: true,
+        publishAudio: true
+      });
+
+      session.publish(videoclipPublisher, (error) => {
+        if (error) {
+          console.error('VideoClip OT Publish Failed');
+          console.error(error.message);
+          console.error(error);
+          return;
+        }
+        console.log('VideoClip OT Published');
+      });
+    }
+  }
+
   //UI actions
   const video = document.createElement("video");
-  const videoclipLoader = document.querySelector("input#videoclip-loader");
+  video.crossOrigin = "anonymous";
+  video.setAttribute('style','width:300px !important;height:250px !important;');
+  video.controls = true;
+  const videoclipLoader = document.querySelector("div#videoclip-loader");
   const form = document.getElementsByTagName("form")[0];
   const videoclip = document.querySelector("input#videoclip");
-  videoclipLoader.appendChild(video);
+  if(videoclipLoader) {
+    videoclipLoader.appendChild(video);
+  }
+  video.onloadedmetadata = function() {
+    video.play();
+  };
+  video.onplay = function() {
+    publishVideoClip(video);
+  }
+  video.onended = function() {
+    if(videoclipPublisher) {
+      session.unpublish(videoclipPublisher);
+    }
+  }
+  video.onpause = function() {
+    if(videoclipPublisher) {
+      session.unpublish(videoclipPublisher);
+    }
+  }
 
   form.addEventListener("submit", function(event) {
     event.preventDefault();
     if(videoclip && videoclip.value) {
-      if(videoclipLoader) {
-        
+      if(videoclipLoader && video) {
+        video.src = videoclip.value;
       }
     }
   })
